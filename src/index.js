@@ -5,7 +5,7 @@ const app = express();
 
 app.use(express.json());
 
-mongoose.connect("mongodb+srv://Project-Blog:qiYB15hhfyagKV77@cluster0.ezzulkw.mongodb.net/Project-1", {
+mongoose.connect("mongodb+srv://ritwikmukherjee:OD2EVF8X47p26tdw@cluster0.tzjat9y.mongodb.net/group48Database?retryWrites=true&w=majority", {
     useNewUrlParser: true
 })
     .then(() => console.log("MongoDb is connected"))
