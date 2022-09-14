@@ -85,8 +85,8 @@ const collegeDetails = async function (req, res) {
         data.interns = []
         const collegeId = college._id
         const internsList = await internModel.find({ collegeId: collegeId , isDeleted: false}).select({name: 1, email:1, mobile: 1})
-        if (!internsList) {
-            return res.status(404).send({ status: false, message: `${collegeName} no interns found!!` })
+        if (internsList.length == 0) {
+            return res.status(404).send({ status: false, message: "No interns found!!" })
         }
 
         //.............using spread operator for interns list............
