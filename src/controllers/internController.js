@@ -14,8 +14,8 @@ const createIntern = async function (req, res) {
         let { name, mobile, email, collegeName } = requestBody
         if (!isValid(name)) return res.status(400).send({ status: false, message: "Name is Required" });
         if (!isValid(mobile)) return res.status(400).send({ status: false, message: "Mobile no. is Required" });
-        const valid = mobile.length
-        if (!valid == 10) {
+        const valid = mobile.lenght
+        if (!(valid==10)) {
             res.status(400).send({ message: "Please enter valid Mobile Number" })
         }
      
@@ -28,7 +28,7 @@ const createIntern = async function (req, res) {
         if (!isValid(collegeName)) return res.status(400).send({ status: false, message: "College Name is Required" });
 
         const unique = await internModel.findOne({ email: email, mobile: mobile });
-        if (!unique) return res.status(401).send({ status: false, message: "Use Different Email or Mobile Number" });
+        if (unique) return res.status(401).send({ status: false, message: "Use Different Email or Mobile Number" });
 
         const college = await collegeModel.findOne({ name: collegeName })
         if(!college){
