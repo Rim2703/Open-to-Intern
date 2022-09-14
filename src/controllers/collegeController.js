@@ -6,9 +6,9 @@ const isValid = function (value) {
     return true
 }
 
-const colleges = async function (req, res) {
+const createColleges = async function (req, res) {
     try {
-        let data = req.body
+        let requestBody = req.body
         if (Object.keys(requestBody).length === 0) return res.status(400).send({ status: false, message: "Please enter College details" });
         const { name, fullName, logoLink, } = data; //Destructuring
 
@@ -23,7 +23,7 @@ const colleges = async function (req, res) {
 
 
 
-        let collegeCreate = await collegeModel.create(data)
+        let collegeCreate = await collegeModel.create(requestBody)
         res.status(201).send({ status: true, message: "College is successfully Created", data: collegeCreate })
     }
     catch (err) {
@@ -31,4 +31,4 @@ const colleges = async function (req, res) {
     }
 }
 
-module.exports = { colleges }
+module.exports = { createColleges }
