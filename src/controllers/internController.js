@@ -13,29 +13,29 @@ const createIntern = async function (req, res) {
         if (Object.keys(requestBody).length === 0) return res.status(400).send({ status: false, message: "Please enter Intern details" });
         let { name, mobile, email, collegeName } = requestBody
         if (!isValid(name)) return res.status(400).send({ status: false, message: "Name is Required" });
+
         if (!isValid(mobile)) return res.status(400).send({ status: false, message: "Mobile no. is Required" });
-        const valid = mobile.lenght
-        if (!(valid==10)) {
-            res.status(400).send({ message: "Please enter valid Mobile Number" })
+        const regMobile = /^(\+\d{1,3}[- ]?)?\d{10}$/;
+        if (!regMobile.test(mobile)) {
+            return res.status(400).send({ message: "Please enter valid Mobile Number" })
         }
-     
+        let mobData = await internModel.findOne({ mobile: mobile })
+        if (mobData) return res.status(400).send({ status: false, msg: 'Duplicate mobile' })
 
         if (!isValid(email)) return res.status(400).send({ status: false, message: "email is Required" });
         const regx = /^([a-z0-9\._]+)@([a-z0-9]+.)([a-z]+)(.[a-z])?$/;
         if (!regx.test(email)) return res.status(400).send({ status: false, message: "Enter Valid Email" });
-        
-    
+        let emailData = await internModel.findOne({ email: email })
+        if (emailData) return res.status(400).send({ status: false, msg: 'Duplicate email' })
+
         if (!isValid(collegeName)) return res.status(400).send({ status: false, message: "College Name is Required" });
 
-        const unique = await internModel.findOne({ email: email, mobile: mobile });
-        if (unique) return res.status(401).send({ status: false, message: "Use Different Email or Mobile Number" });
-
         const college = await collegeModel.findOne({ name: collegeName })
-        if(!college){
-            res.status(404).send({status: false, message: `${collegeName} no college found!!`})
+        if (!college) {
+            res.status(404).send({ status: false, message: `${collegeName} no college found!!` })
         }
 
-        const collegeId = college._id 
+        const collegeId = college._id
         requestBody["collegeId"] = collegeId
 
         let createIntern = await internModel.create(requestBody)
