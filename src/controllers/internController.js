@@ -1,3 +1,4 @@
+const { Query } = require("mongoose")
 const collegeModel = require("../models/collegeModel")
 const internModel = require("../models/internModel")
 
@@ -46,4 +47,33 @@ const createIntern = async function (req, res) {
     }
 }
 
-module.exports = { createIntern }
+const collegeDetails = async function (req, res) {
+    try {
+        let query = req.query
+        let collegeName = query.collegeName
+        if (Object.keys(query).length === 0) {
+            return res.status(400).send({ status: false, message: "Please Provide filter for fetching details!!" })
+        }
+        const college = await collegeModel.findOne({ name: collegeName })
+        if (!college) {
+          return res.status(404).send({ status: false, message: `${collegeName} no college found!!` })
+        }
+        const { name, fullName, logoLink } = college
+        const data = { name, fullName, logoLink };
+
+        data.dataInterns = []
+        const collegeId = college._id
+        const internsList = await internModel.find({ collegeId: collegeId })
+        if (!internsList) {
+            return res.status(404).send({ status: false, message: `${collegeName} no interns found!!` })
+        }
+
+        data.dataInterns = [...internsList]
+        return res.status(200).send({ status: true, data: data })
+    }
+    catch (err) {
+        res.status(500).send({ status: false, msg: err.message })
+    }
+}
+
+module.exports = { createIntern, collegeDetails }

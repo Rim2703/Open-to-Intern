@@ -10,7 +10,7 @@ const createColleges = async function (req, res) {
     try {
         let requestBody = req.body
         if (Object.keys(requestBody).length === 0) return res.status(400).send({ status: false, message: "Please enter College details" });
-        const { name, fullName, logoLink, } = data; //Destructuring
+        const { name, fullName, logoLink, } = requestBody; //Destructuring
 
         if (!isValid(name)) return res.status(400).send({ status: false, message: "Name is Required" });
         if (!isValid(fullName)) return res.status(400).send({ status: false, message: "FullName is Required" });
