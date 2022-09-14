@@ -84,7 +84,7 @@ const collegeDetails = async function (req, res) {
         //.............creating empty array for interns list............
         data.interns = []
         const collegeId = college._id
-        const internsList = await internModel.find({ collegeId: collegeId })
+        const internsList = await internModel.find({ collegeId: collegeId , isDeleted: false}).select({name: 1, email:1, mobile: 1})
         if (!internsList) {
             return res.status(404).send({ status: false, message: `${collegeName} no interns found!!` })
         }
