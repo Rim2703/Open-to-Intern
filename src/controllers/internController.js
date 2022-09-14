@@ -18,21 +18,17 @@ const createIntern = async function (req, res) {
         if (!valid == 10) {
             res.status(400).send({ message: "Please enter valid Mobile Number" })
         }
-        let moblileData = await internModel.findOne({ mobile: mobile })
-        if (moblileData) return res.status(400).send({ status: false, msg: 'Duplicate mobile' })
-
+     
 
         if (!isValid(email)) return res.status(400).send({ status: false, message: "email is Required" });
         const regx = /^([a-z0-9\._]+)@([a-z0-9]+.)([a-z]+)(.[a-z])?$/;
         if (!regx.test(email)) return res.status(400).send({ status: false, message: "Enter Valid Email" });
         
-        let Data = await internModel.findOne({ email: email })
-        if (Data) return res.status(400).send({ status: false, msg: 'Duplicate email' })
-
+    
         if (!isValid(collegeName)) return res.status(400).send({ status: false, message: "College Name is Required" });
 
         const unique = await internModel.findOne({ email: email, mobile: mobile });
-        if (unique) return res.status(401).send({ status: false, message: "Use Different Email or Mobile Number" });
+        if (!unique) return res.status(401).send({ status: false, message: "Use Different Email or Mobile Number" });
 
         const college = await collegeModel.findOne({ name: collegeName })
         if(!college){
