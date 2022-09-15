@@ -17,6 +17,12 @@ const createIntern = async function (req, res) {
 
         let { name, mobile, email, collegeName } = requestBody
         if (!isValid(name)) return res.status(400).send({ status: false, message: "Name is Required" });
+  
+        //.............regex for Name............
+        const regName=/^[a-zA-Z]+([\s][a-zA-Z]+)*$/
+        if (!regName.test(name)) {
+            return res.status(400).send({ message: "Please enter valid Name" })
+        }
         if (!isValid(mobile)) return res.status(400).send({ status: false, message: "Mobile no. is Required" });
 
         //.............regex for mobile............
@@ -32,7 +38,7 @@ const createIntern = async function (req, res) {
         if (!isValid(email)) return res.status(400).send({ status: false, message: "email is Required" });
 
         //.............validation for email............
-        const regx = /^([a-z0-9\._]+)@([a-z0-9]+.)([a-z]+)(.[a-z])?$/;
+        const regx = /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/;
         if (!regx.test(email)) return res.status(400).send({ status: false, message: "Enter Valid Email" });
 
         let emailData = await internModel.findOne({ email: email })
