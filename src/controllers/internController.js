@@ -18,11 +18,12 @@ const createIntern = async function (req, res) {
         let { name, mobile, email, collegeName } = requestBody
         if (!isValid(name)) return res.status(400).send({ status: false, message: "Name is Required" });
   
-        //.............regex for Name............
+        //.............regex for intern Name............
         const regName=/^[a-zA-Z]+([\s][a-zA-Z]+)*$/
         if (!regName.test(name)) {
             return res.status(400).send({ message: "Please enter valid Name" })
         }
+       
         if (!isValid(mobile)) return res.status(400).send({ status: false, message: "Mobile no. is Required" });
 
         //.............regex for mobile............
@@ -33,27 +34,27 @@ const createIntern = async function (req, res) {
         let mobData = await internModel.findOne({ mobile: mobile })
 
         //.............when mobile number is already in use............
-        if (mobData) return res.status(400).send({ status: false, msg: 'Duplicate mobile' })
+        if (mobData) return res.status(400).send({ status: false, msg: 'Duplicate Mobile Number, Please Provide another!!' })
 
         if (!isValid(email)) return res.status(400).send({ status: false, message: "email is Required" });
 
         //.............validation for email............
         const regx = /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/;
         if (!regx.test(email)) return res.status(400).send({ status: false, message: "Enter Valid Email" });
-
+        
         let emailData = await internModel.findOne({ email: email })
 
         //.............when email is already in use............
-        if (emailData) return res.status(400).send({ status: false, msg: 'Duplicate email' })
+        if (emailData) return res.status(400).send({ status: false, msg: 'Duplicate email found, Please try with another!!' })
 
         if (!isValid(collegeName)) return res.status(400).send({ status: false, message: "College Name is Required" });
 
         const college = await collegeModel.findOne({ name: collegeName })
         if (!college) {
-            res.status(404).send({ status: false, message: `${collegeName} no college found!!` })
+          return res.status(404).send({ status: false, message: `${collegeName} No college found!!` })
         }
 
-        //.............compare collegeId from college model to request............
+        //.............compare collegeId from college model to request and recieve collegeId in response............
         const collegeId = college._id
         requestBody["collegeId"] = collegeId
 
@@ -78,9 +79,9 @@ const collegeDetails = async function (req, res) {
         }
 
         //.............if college name does not match in db............
-        const college = await collegeModel.findOne({ name: collegeName })
+        const college = await collegeModel.findOne({ name: collegeName ,isDeleted: false})
         if (!college) {
-            return res.status(404).send({ status: false, message: `${collegeName} no college found!!` })
+            return res.status(404).send({ status: false, message: `${collegeName} No college found!!` })
         }
 
         //.............destructuring all fields............

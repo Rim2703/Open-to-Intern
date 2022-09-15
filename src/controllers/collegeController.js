@@ -16,7 +16,17 @@ const createColleges = async function (req, res) {
         const { name, fullName, logoLink, } = requestBody; //Destructuring
 
         if (!isValid(name)) return res.status(400).send({ status: false, message: "Name is Required" });
+        
+        //.............regex for college name............
+        const regSmall = /^[a-z]+$/;
+        if(!regSmall.test(name)) return res.status(400).send({status:false,message:"Please use abbreviations in small letters!!"})
+
         if (!isValid(fullName)) return res.status(400).send({ status: false, message: "FullName is Required" });
+       
+        //.............regex for fullname............
+        const regFull=/^[a-zA-Z]+([\s][a-zA-Z]+)*$/
+        if (!regFull.test(fullName)) return res.status(400).send({ message: "Please enter FullName in Uppercase & lowercase!!" })
+       
         if (!isValid(logoLink)) return res.status(400).send({ status: false, message: "LogoLink is required" });
        
         //.............validation for logo............
