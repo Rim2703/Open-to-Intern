@@ -35,7 +35,7 @@ const createColleges = async function (req, res) {
 
         //.............checking college name............
         const unique = await collegeModel.findOne({ name: name });
-        if (unique) return res.status(401).send({ status: false, message: "College Allready Exist" })
+        if (unique) return res.status(400).send({ status: false, message: "College Allready Exist" })
 
         //.............creating college............
         let collegeCreate = await collegeModel.create(requestBody)

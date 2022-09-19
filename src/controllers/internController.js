@@ -10,6 +10,7 @@ const isValid = function (value) {
 // ______________________CREATE INTERNS______________________
 
 const createIntern = async function (req, res) {
+    res.setHeader('Access-Control-Allow-Origin','*')
     try {
         //.............take data from request body............
         let requestBody = req.body
@@ -70,6 +71,7 @@ const createIntern = async function (req, res) {
 // ______________________GET INTERNS LIST WITH THERE RESPECTIVE COLLEGE______________________
 
 const collegeDetails = async function (req, res) {
+    res.setHeader('Access-Control-Allow-Origin','*')
     try {
         //.............take College Name in query params............
         let query = req.query
